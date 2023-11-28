@@ -3,6 +3,7 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 
 ## Bibliotecário
 
+#pragma once
 #include "Bibliotecario.hpp"
 #include "Bibliotecario.hpp"
 #include "ControleEmprestimo.hpp"  
@@ -46,43 +47,43 @@ void Bibliotecario::cadastrarUsuario(Usuario& usuario) {
 }
 
 void Bibliotecario::realizarEmprestimo(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario) {
-    // Supondo que você tenha um livro disponível no acervo
+    @param Supondo que você tenha um livro disponível no acervo
     Livro livro = acervo.obterLivroDisponivel();
     
-    // Chame a função registrarEmprestimo com o livro obtido
+    @param Chame a função registrarEmprestimo com o livro obtido
     controleEmprestimo.registrarEmprestimo(livro, usuario, acervo);    
 	
-	// Supondo que o usuário já esteja cadastrado
+	@param Supondo que o usuário já esteja cadastrado
     std::string codigoLivro;
     std::cout << "Digite o código do livro a ser emprestado: ";
     std::cin >> codigoLivro;
 
-    // Encontrar o livro no acervo
+    @param Encontrar o livro no acervo
     Livro livro = acervo.buscarLivroPorCodigo(codigoLivro);
 
-    // Realizar empréstimo
+    @param Realizar empréstimo
     controleEmprestimo.registrarEmprestimo(acervo, usuario, livro);
 
     std::cout << "Empréstimo realizado com sucesso!" << std::endl;
 }
 
 void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario) {
-    // Supondo que você tenha um livro emprestado pelo usuário
+    @param Supondo que você tenha um livro emprestado pelo usuário
     Livro livro = controleEmprestimo.obterLivroEmprestado(usuario);
     
-    // Chame a função registrarDevolucao com o livro obtido
+    @param Chame a função registrarDevolucao com o livro obtido
     controleEmprestimo.registrarDevolucao(livro, usuario, acervo);
     
 
-    // Supondo que o usuário já tenha livros emprestados
+    @param Supondo que o usuário já tenha livros emprestados
     std::string codigoLivro;
     std::cout << "Digite o código do livro a ser devolvido: ";
     std::cin >> codigoLivro;
 
-    // Encontrar o livro no acervo
+    @param Encontrar o livro no acervo
     Livro livro = acervo.buscarLivroPorCodigo(codigoLivro);
 
-    // Realizar devolução
+    @param Realizar devolução
     controleEmprestimo.registrarDevolucao(acervo, usuario, livro);
 
     std::cout << "Devolução realizada com sucesso!" << std::endl;
