@@ -3,6 +3,8 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 
 ## Bibliotecário
 
+**bibliotecario.cpp**
+
 ```c++
 
 #include "Bibliotecario.hpp"
@@ -83,4 +85,33 @@ void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo
 
     std::cout << "Devolução realizada com sucesso!" << std::endl;
 }
+```
+
+**bibliotecario.hpp**
+
+```c++
+
+#ifndef BIBLIOTECARIO_HPP
+#define BIBLIOTECARIO_HPP
+
+#include <iostream>
+#include "ControleAcervo.hpp"
+#include "ControleEmprestimo.hpp" 
+#include "Pesquisa.hpp"  
+#include "Usuario.hpp"
+
+class Bibliotecario {
+public:
+    void cadastrarLivro(ControleAcervo& acervo);
+    void atualizarInformacoesLivro(ControleAcervo& acervo, Livro& livro);
+    void cadastrarUsuario(Usuario& usuario);
+    void atualizarInformacoesUsuario(Usuario& usuario);
+    void emitirCarteiraIdentificacao(Usuario& usuario);
+	void realizarEmprestimo(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario);
+    void realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario);
+    void realizarPesquisa(ControleAcervo& acervo, Usuario& usuario, Pesquisa& pesquisa);
+};
+
+#endif // BIBLIOTECARIO_HPP
+
 ```
