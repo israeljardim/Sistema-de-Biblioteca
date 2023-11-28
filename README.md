@@ -156,6 +156,42 @@ public:
 `ControleAcervo.cpp`
 
 ```c++
+#include "ControleAcervo.hpp"
+
+void ControleAcervo::armazenarLivro(const Livro& livro) {
+    livros.push_back(livro);
+}
+
+Livro ControleAcervo::buscarLivroPorCodigo(const std::string& codigo) const {
+    for (const auto& livro : livros) {
+        if (livro.getCodigoCadastro() == codigo) {
+            return livro;
+        }
+    }
+    // Retornar um livro "vazio" se não encontrado (pode ser ajustado conforme necessário)
+    return Livro("", "", "", "", "", "", 0, "");
+}
+
+void ControleAcervo::agruparPorGenero() const {
+    // Implementar a lógica de agrupamento por gênero
+    // Exemplo simples: imprimir os livros agrupados por gênero
+    std::map<std::string, std::vector<Livro>> livrosPorGenero;
+
+    for (const auto& livro : livros) {
+        livrosPorGenero[livro.getCategoria()].push_back(livro);
+    }
+
+    for (const auto& [genero, livrosGenero] : livrosPorGenero) {
+        std::cout << "Livros no gênero " << genero << ":\n";
+        for (const auto& livro : livrosGenero) {
+            livro.mostrarInformacoes();
+            std::cout << "----------\n";
+        }
+    }
+}
+
+void ControleAcervo::agruparPorAutor() const {
+    // Implementar a lógica de agrupamento por autor
     // Exemplo simples: imprimir os livros agrupados por autor
     std::map<std::string, std::vector<Livro>> livrosPorAutor;
 
