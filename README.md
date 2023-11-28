@@ -3,7 +3,8 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 
 ## Bibliotecário
 
-#pragma once
+```c++
+
 #include "Bibliotecario.hpp"
 #include "Bibliotecario.hpp"
 #include "ControleEmprestimo.hpp"  
@@ -88,3 +89,4 @@ void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo
 
     std::cout << "Devolução realizada com sucesso!" << std::endl;
 }
+```
