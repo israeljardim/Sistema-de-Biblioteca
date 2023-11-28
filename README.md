@@ -1,7 +1,9 @@
 # Sistema-de-Biblioteca
 Um sistema de biblioteca é uma plataforma que facilita a gestão de uma biblioteca. O sistema mantém um catálogo organizado, registra a disponibilidade de materiais e controla as datas de empréstimo e devolução. Dessa forma, os usuários podem acessar a coleção e manter um registro de suas atividades na biblioteca.
 
-## Classe Bibliotecário
+## Classes Bibliotecário
+
+### Classe Bibliotecário
 
 `bibliotecario.hpp`
 
@@ -116,7 +118,7 @@ void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo
 }
 ```
 
-## Classe Controle de Acervo
+### Classe Controle de Acervo
 
 `ControleAcervo.hpp`
 
@@ -246,11 +248,11 @@ void ControleAcervo::realizarPesquisaPorAutor(const std::string& autor) const {
 }
 ```
 
-## Classe Controle de Empréstimo
+### Classe Controle de Empréstimo
 
-```c++
 `ControleEmprestimo.hpp`
 
+```c++
 #ifndef CONTROLEEMPRESTIMO_HPP
 #define CONTROLEEMPRESTIMO_HPP
 
@@ -275,6 +277,7 @@ public:
 
 #endif // CONTROLEEMPRESTIMO_HPP
 ```
+
 
 `ControleEmprestimo.cpp`
 
@@ -365,5 +368,433 @@ void ControleEmprestimo::gerarComprovanteDeDevolucao(const Livro& livro, const U
     std::cout << "Livro: " << livro.getTitulo() << "\n";
     std::cout << "Usuário: " << usuario.getNomeUsuario() << "\n";
     std::cout << "Data de Devolução: " << getCurrentDate() << "\n"; // Implemente uma função para obter a data atual
+}
+```
+
+### Classe Livro
+
+`Livro.hpp`
+
+```c++
+#ifndef LIVRO_HPP
+#define LIVRO_HPP
+
+#include <iostream>
+#include <string>
+
+class Livro {
+private:
+    std::string codigoCadastro;
+    std::string titulo;
+    std::string autor;
+    std::string edicao;
+    std::string editora;
+    std::string sinopse;
+    int numPaginas;
+    std::string categoria;
+    bool disponivel;
+
+public:
+    Livro(std::string codigo, std::string t, std::string a, std::string e, std::string ed, std::string s, int np, std::string cat);
+    
+    // Métodos de acesso às informações do livro
+    std::string getCodigoCadastro() const;
+    std::string getTitulo() const;
+    std::string getAutor() const;
+    std::string getGenero() const;
+    std::string getEdicao() const;
+    std::string getEditora() const;
+    std::string getSinopse() const;
+    int getNumPaginas() const;
+    std::string getCategoria() const;
+    bool estaDisponivel() const;
+
+    // Métodos para atualizar informações do livro
+    void mostrarInformacoes() const;
+    void atualizarInformacoes();
+    void marcarComoDisponivel();
+    void marcarComoIndisponivel();
+    void atualizarTitulo(const std::string& novoTitulo);
+    void atualizarSinopse(const std::string& novaSinopse);
+};
+
+#endif
+```
+
+`Livro.cpp`
+
+```c++
+#include "Livro.hpp"
+
+Livro::Livro(std::string codigo, std::string t, std::string a, std::string e, std::string ed, std::string s, int np, std::string cat)
+    : codigoCadastro(codigo), titulo(t), autor(a), edicao(e), editora(ed), sinopse(s), numPaginas(np), categoria(cat), disponivel(true) {}
+
+std::string Livro::getCodigoCadastro() const {
+    return codigoCadastro;
+}
+
+std::string Livro::getTitulo() const {
+    return titulo;
+}
+
+std::string Livro::getAutor() const {
+    return autor;
+}
+
+std::string Livro::getGenero() const {
+    return this->genero;
+}
+
+
+std::string Livro::getEdicao() const {
+    return edicao;
+}
+
+std::string Livro::getEditora() const {
+    return editora;
+}
+
+std::string Livro::getSinopse() const {
+    return sinopse;
+}
+
+int Livro::getNumPaginas() const {
+    return numPaginas;
+}
+
+std::string Livro::getCategoria() const {
+    return categoria;
+}
+
+bool Livro::estaDisponivel() const {
+    return disponivel;
+}
+
+void Livro::mostrarInformacoes() const {
+    std::cout << "Código de Cadastro: " << codigoCadastro << std::endl;
+    std::cout << "Título: " << titulo << std::endl;
+    std::cout << "Autor: " << autor << std::endl;
+    std::cout << "Edição: " << edicao << std::endl;
+    std::cout << "Editora: " << editora << std::endl;
+    std::cout << "Sinopse: " << sinopse << std::endl;
+    std::cout << "Número de Páginas: " << numPaginas << std::endl;
+    std::cout << "Categoria: " << categoria << std::endl;
+    std::cout << "Disponível: " << (disponivel ? "Sim" : "Não") << std::endl;
+}
+
+void Livro::atualizarTitulo(const std::string& novoTitulo) {
+    this->titulo = novoTitulo;
+}
+
+void Livro::atualizarSinopse(const std::string& novaSinopse) {
+    this->sinopse = novaSinopse;
+}
+
+void Livro::marcarComoDisponivel() {
+    disponivel = true;
+}
+
+void Livro::marcarComoIndisponivel() {
+    disponivel = false;
+}
+
+void exibirResultados(const std::vector<Livro>& resultados) {
+    // Implementação da função para exibir os resultados
+    for (const Livro& livro : resultados) {
+        std::cout << "Título: " << livro.getTitulo() << std::endl;
+        // Adicione mais informações do livro conforme necessário
+    }
+}
+```
+
+### Classe Pesquisa
+
+`Pesquisa.hpp`
+
+```c++
+#ifndef PESQUISA_HPP
+#define PESQUISA_HPP
+
+#include <string>
+#include <iostream>
+#include <vector>
+#include "Livro.hpp"  
+#include "ControleAcervo.hpp" 
+
+class Pesquisa {
+public:
+    // Métodos
+    std::vector<Livro> pesquisarPorTitulo(const std::string& titulo, const ControleAcervo& controleAcervo) const;
+    std::vector<Livro> pesquisarPorAutor(const std::string& autor, const ControleAcervo& controleAcervo) const;
+    std::vector<Livro> pesquisarPorGenero(const std::string& genero, const ControleAcervo& controleAcervo) const;
+};
+
+#endif // PESQUISA_HPP
+```
+
+`Pesquisa.cpp`
+
+```c++
+#include "Pesquisa.hpp"
+
+std::vector<Livro> Pesquisa::pesquisarPorTitulo(const std::string& titulo, const ControleAcervo& controleAcervo) const {
+    // Lógica para pesquisar por título
+    return controleAcervo.pesquisarPorTitulo(titulo);
+}
+
+std::vector<Livro> Pesquisa::pesquisarPorAutor(const std::string& autor, const ControleAcervo& controleAcervo) const {
+    // Lógica para pesquisar por autor
+    return controleAcervo.pesquisarPorAutor(autor);
+}
+
+std::vector<Livro> Pesquisa::pesquisarPorGenero(const std::string& genero, const ControleAcervo& controleAcervo) const {
+    // Lógica para pesquisar por gênero
+    return controleAcervo.pesquisarPorGenero(genero);
+}
+```
+
+### Classe Usuário
+
+`Usuario.hpp`
+
+```c++
+#ifndef USUARIO_HPP
+#define USUARIO_HPP
+
+#include <string>
+#include <vector>
+
+class Usuario {
+private:
+    std::string nomeUsuario;
+    std::string senha;
+    std::string email;
+    std::vector<std::pair<std::string, std::string>> historicoEmprestimos;  // Par (Código do Livro, Data de Empréstimo)
+
+public:
+    // Construtor
+    Usuario(const std::string& nome, const std::string& senha, const std::string& email);
+
+    // Métodos
+    const std::string& getNomeUsuario() const;
+    const std::string& getSenha() const;
+    const std::string& getEmail() const;
+    void mostrarHistorico() const;
+    void adicionarHistorico(const std::string& codigoLivro, const std::string& dataEmprestimo);
+};
+
+#endif
+```
+
+`Usuario.cpp`
+
+```c++
+#include "Usuario.hpp"
+#include <iostream>
+
+// Construtor
+Usuario::Usuario(const std::string& nome, const std::string& senha, const std::string& email)
+    : nomeUsuario(nome), senha(senha), email(email) {}
+
+// Métodos
+const std::string& Usuario::getNomeUsuario() const {
+    return nomeUsuario;
+}
+
+const std::string& Usuario::getSenha() const {
+    return senha;
+}
+
+const std::string& Usuario::getEmail() const {
+    return email;
+}
+
+void Usuario::mostrarHistorico() const {
+    std::cout << "Histórico de Empréstimos do Usuário " << nomeUsuario << ":\n";
+    for (const auto& emprestimo : historicoEmprestimos) {
+        std::cout << "Livro: " << emprestimo.first << ", Data de Empréstimo: " << emprestimo.second << "\n";
+    }
+    std::cout << "-------------------------------------\n";
+}
+
+void Usuario::adicionarHistorico(const std::string& codigoLivro, const std::string& dataEmprestimo) {
+    historicoEmprestimos.push_back(std::make_pair(codigoLivro, dataEmprestimo));
+}
+```
+
+## Execução
+
+`main.cpp`
+
+```c++
+#include "Bibliotecario.hpp"
+#include "Livro.hpp"
+#include "ControleAcervo.hpp"
+#include "ControleEmprestimo.hpp"
+#include "Usuario.hpp"
+#include "Pesquisa.hpp"
+#include <iostream>
+#include <vector>
+
+//Bibliotecario//
+
+int main() {
+    
+	bibliotecario.cadastrarUsuario(usuario);
+    bibliotecario bibliotecario;
+    bibliotecario.cadastrarLivro(acervo);
+	bibliotecario.realizarEmprestimo(acervo, controleEmprestimo, usuario);
+	bibliotecario.realizarPesquisa(acervo, usuario, pesquisa);
+	controleAcervo.armazenarLivro(livro);
+
+    // Adicionando um exemplo de cadastro de usuário
+    bibliotecario.cadastrarUsuario(usuario);
+
+    // Exemplo de realização de empréstimo
+    bibliotecario.realizarEmprestimo(acervo, controleEmprestimo, usuario);
+
+    // Exemplo de realização de devolução
+    bibliotecario.realizarDevolucao(acervo, controleEmprestimo, usuario);
+
+    // Exemplo de realização de pesquisa
+    bibliotecario.realizarPesquisa(acervo, usuario, pesquisa);
+
+    return 0;
+
+
+//Livro//
+
+    // Exemplo de criação de livros
+    Livro livro1("123ABC", "Aventuras no Mundo da Programação", "Autor Exemplo", "1ª Edição", "Editora Livro Bom", "Sinopse do Livro", 200, "Programação");
+    Livro livro2("456DEF", "Introdução à Inteligência Artificial", "Autor AI", "3ª Edição", "Editora Tech AI", "Sinopse de AI", 300, "Inteligência Artificial");
+
+    // Exemplo de exibição de informações dos livros
+    std::cout << "Informações do Livro 1:\n";
+    livro1.mostrarInformacoes();
+    std::cout << "\nInformações do Livro 2:\n";
+    livro2.mostrarInformacoes();
+
+    // Exemplo de atualização de informações do livro
+    livro1.atualizarTitulo("Aventuras no Mundo da Programação - Edição Atualizada");
+    livro1.atualizarSinopse("Nova Sinopse Atualizada");
+
+    // Exibir informações atualizadas
+    std::cout << "\nInformações atualizadas do Livro 1:\n";
+    livro1.mostrarInformacoes();
+
+    // Exemplo de marcação de disponibilidade
+    livro2.marcarComoIndisponivel();
+
+    // Exibir informações atualizadas
+    std::cout << "\nInformações atualizadas do Livro 2:\n";
+    livro2.mostrarInformacoes();
+
+    return 0;
+
+//ControleAcervo//
+
+    // Criando um objeto do ControleAcervo
+    ControleAcervo acervo;
+    acervo.armazenarLivro(livro1);
+    acervo.armazenarLivro(livro2);
+
+    // Exemplo de busca de livro por código
+    Livro livroEncontrado = acervo.buscarLivroPorCodigo("123ABC");
+
+    // Exemplo de pesquisa por título
+    acervo.realizarPesquisaPorTitulo("Aventuras no Mundo da Programação");
+
+    // Exemplo de agrupamento por autor
+    acervo.agruparPorAutor();
+
+    return 0;
+
+//ControleEmprestimo//
+
+
+    // Criar objeto ControleAcervo e adicionar o livro ao acervo
+    ControleAcervo controleAcervo;
+    controleAcervo.armazenarLivro(livro);
+
+    // Criar objeto ControleEmprestimo
+    ControleEmprestimo controleEmprestimo;
+
+    // Registrar um empréstimo
+    controleEmprestimo.registrarEmprestimo(livro, usuario, controleAcervo);
+
+    // Registrar uma renovação
+    controleEmprestimo.registrarRenovacao(livro, usuario);
+
+    // Registrar uma devolução
+    controleEmprestimo.registrarDevolucao(livro, usuario, controleAcervo);
+
+    // Gerar comprovante de devolução
+    controleEmprestimo.gerarComprovanteDeDevolucao(livro, usuario);
+
+    return 0;
+
+//Usuario//
+
+    // Criar objeto de exemplo
+    Usuario usuario("usuario123", "senha123", "email@exemplo.com");
+
+    // Exibir informações do usuário
+    std::cout << "Nome do Usuário: " << usuario.getNomeUsuario() << "\n";
+    std::cout << "Senha: " << usuario.getSenha() << "\n";
+    std::cout << "Email: " << usuario.getEmail() << "\n";
+
+    // Adicionar alguns empréstimos ao histórico
+    usuario.adicionarHistorico("123ABC", "2023-01-01");
+    usuario.adicionarHistorico("456DEF", "2023-02-01");
+
+    // Mostrar o histórico de empréstimos
+    usuario.mostrarHistorico();
+
+    return 0;
+
+//Pesquisa//
+
+void exibirResultados(const std::vector<Livro>& resultados){
+	std::vector<Livro> resultados; 
+    exibirResultados(resultados);
+	
+	for (const auto& livro : resultados) {
+		std::cout << "Título: " << livro.getTitulo() << std::endl;
+	}
+	
+    // Criar objeto ControleAcervo e adicionar os livros ao acervo
+    ControleAcervo controleAcervo;
+    controleAcervo.armazenarLivro(livro1);
+    controleAcervo.armazenarLivro(livro2);
+ 
+
+    // Criar objeto Pesquisa
+    Pesquisa pesquisa;
+
+    // Realizar pesquisas
+    std::cout << "Pesquisa por Título:\n";
+    std::vector<Livro> resultadoTitulo = pesquisa.pesquisarPorTitulo("Aventuras", controleAcervo);
+    exibirResultados(resultadoTitulo);
+
+    std::cout << "\nPesquisa por Autor:\n";
+    std::vector<Livro> resultadoAutor = pesquisa.pesquisarPorAutor("Autor Exemplo", controleAcervo);
+    exibirResultados(resultadoAutor);
+
+    std::cout << "\nPesquisa por Gênero:\n";
+    std::vector<Livro> resultadoGenero = pesquisa.pesquisarPorGenero("Ficção Científica", controleAcervo);
+    exibirResultados(resultadoGenero);
+
+    return 0;
+}
+// Função auxiliar para exibir resultados da pesquisa
+void exibirResultados(const std::vector<Livro>& resultados) {
+    if (resultados.empty()) {
+        std::cout << "Nenhum resultado encontrado.\n";
+    } else {
+        for (const auto& livro : resultados) {
+            std::cout << "Livro: " << livro.getTitulo() << " | Autor: " << livro.getAutor() << " | Gênero: " << livro.getGenero() << "\n";
+        }
+    }
+}
 }
 ```
