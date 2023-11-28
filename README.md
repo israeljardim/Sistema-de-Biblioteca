@@ -3,7 +3,7 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 
 ## Bibliotecário
 
-**bibliotecario.cpp**
+`bibliotecario.cpp`
 
 ```c++
 
@@ -87,7 +87,7 @@ void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo
 }
 ```
 
-**bibliotecario.hpp**
+`bibliotecario.hpp`
 
 ```c++
 
