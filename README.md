@@ -3,6 +3,33 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 
 ## Classe Bibliotecário
 
+`bibliotecario.hpp`
+
+```c++
+#ifndef BIBLIOTECARIO_HPP
+#define BIBLIOTECARIO_HPP
+
+#include <iostream>
+#include "ControleAcervo.hpp"
+#include "ControleEmprestimo.hpp" 
+#include "Pesquisa.hpp"  
+#include "Usuario.hpp"
+
+class Bibliotecario {
+public:
+    void cadastrarLivro(ControleAcervo& acervo);
+    void atualizarInformacoesLivro(ControleAcervo& acervo, Livro& livro);
+    void cadastrarUsuario(Usuario& usuario);
+    void atualizarInformacoesUsuario(Usuario& usuario);
+    void emitirCarteiraIdentificacao(Usuario& usuario);
+    void realizarEmprestimo(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario);
+    void realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario);
+    void realizarPesquisa(ControleAcervo& acervo, Usuario& usuario, Pesquisa& pesquisa);
+};
+
+#endif // BIBLIOTECARIO_HPP
+```
+
 `bibliotecario.cpp`
 
 ```c++
@@ -54,7 +81,7 @@ void Bibliotecario::realizarEmprestimo(ControleAcervo& acervo, ControleEmprestim
     // Chame a função registrarEmprestimo com o livro obtido
     controleEmprestimo.registrarEmprestimo(livro, usuario, acervo);    
 	
-	// Supondo que o usuário já esteja cadastrado
+    // Supondo que o usuário já esteja cadastrado
     std::string codigoLivro;
     std::cout << "Digite o código do livro a ser emprestado: ";
     std::cin >> codigoLivro;
@@ -71,54 +98,60 @@ void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo
     // Supondo que você tenha um livro emprestado pelo usuário
     Livro livro = controleEmprestimo.obterLivroEmprestado(usuario);
     
-    @param Chame a função registrarDevolucao com o livro obtido
+    // Chame a função registrarDevolucao com o livro obtido
     controleEmprestimo.registrarDevolucao(livro, usuario, acervo);
 
-    @param Supondo que o usuário já tenha livros emprestados
+    // Supondo que o usuário já tenha livros emprestados
     std::string codigoLivro;
     std::cout << "Digite o código do livro a ser devolvido: ";
     std::cin >> codigoLivro;
 
-    @param Encontrar o livro no acervo
+    // Encontrar o livro no acervo
     Livro livro = acervo.buscarLivroPorCodigo(codigoLivro);
 
-    @param Realizar devolução
+    // Realizar devolução
     controleEmprestimo.registrarDevolucao(acervo, usuario, livro);
 
     std::cout << "Devolução realizada com sucesso!" << std::endl;
 }
 ```
 
-`bibliotecario.hpp`
+## Classe Controle de Acervo
+
+`ControleAcervo.hpp`
 
 ```c++
-
-#ifndef BIBLIOTECARIO_HPP
-#define BIBLIOTECARIO_HPP
+#ifndef CONTROLEACERVO_HPP
+#define CONTROLEACERVO_HPP
 
 #include <iostream>
-#include "ControleAcervo.hpp"
-#include "ControleEmprestimo.hpp" 
-#include "Pesquisa.hpp"  
+#include <vector>
+#include <algorithm>
+#include "Livro.hpp"
 #include "Usuario.hpp"
 
-class Bibliotecario {
+class ControleAcervo {
+private:
+    std::vector<Livro> livros;
+
 public:
-    void cadastrarLivro(ControleAcervo& acervo);
-    void atualizarInformacoesLivro(ControleAcervo& acervo, Livro& livro);
-    void cadastrarUsuario(Usuario& usuario);
-    void atualizarInformacoesUsuario(Usuario& usuario);
-    void emitirCarteiraIdentificacao(Usuario& usuario);
-	void realizarEmprestimo(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario);
-    void realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario);
-    void realizarPesquisa(ControleAcervo& acervo, Usuario& usuario, Pesquisa& pesquisa);
+    // Métodos relacionados ao acervo de livros
+    void armazenarLivro(const Livro& livro);
+    Livro buscarLivroPorCodigo(const std::string& codigo) const;
+    void agruparPorGenero() const;
+    void agruparPorAutor() const;
+
+    // Métodos relacionados ao controle de empréstimo
+    void registrarEmprestimo(const Livro& livro, const Usuario& usuario);
+    void registrarDevolucao(const Livro& livro, const Usuario& usuario);
+
+    // Métodos para pesquisa
+    void realizarPesquisaPorTitulo(const std::string& titulo) const;
+    void realizarPesquisaPorAutor(const std::string& autor) const;
 };
 
-#endif // BIBLIOTECARIO_HPP
-
+#endif // CONTROLEACERVO_HPP
 ```
-
-## Classe Controle de Acervo
 
 `ControleAcervo.cpp`
 
@@ -177,37 +210,124 @@ void ControleAcervo::realizarPesquisaPorAutor(const std::string& autor) const {
 }
 ```
 
-`ControleAcervo.hpp`
+## Classe Controle de Empréstimo
 
 ```c++
-#ifndef CONTROLEACERVO_HPP
-#define CONTROLEACERVO_HPP
+`ControleEmprestimo.hpp`
+
+#ifndef CONTROLEEMPRESTIMO_HPP
+#define CONTROLEEMPRESTIMO_HPP
 
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "Livro.hpp"
-#include "Usuario.hpp"
+#include "Livro.hpp" 
+#include "Usuario.hpp"  
+#include "ControleAcervo.hpp"
 
-class ControleAcervo {
+class ControleEmprestimo {
 private:
-    std::vector<Livro> livros;
+    std::vector<std::pair<Livro, Usuario>> emprestimos;
 
 public:
-    // Métodos relacionados ao acervo de livros
-    void armazenarLivro(const Livro& livro);
-    Livro buscarLivroPorCodigo(const std::string& codigo) const;
-    void agruparPorGenero() const;
-    void agruparPorAutor() const;
-
     // Métodos relacionados ao controle de empréstimo
-    void registrarEmprestimo(const Livro& livro, const Usuario& usuario);
-    void registrarDevolucao(const Livro& livro, const Usuario& usuario);
-
-    // Métodos para pesquisa
-    void realizarPesquisaPorTitulo(const std::string& titulo) const;
-    void realizarPesquisaPorAutor(const std::string& autor) const;
+    void registrarEmprestimo(const Livro& livro, const Usuario& usuario, const ControleAcervo& controleAcervo);
+    void registrarRenovacao(const Livro& livro, const Usuario& usuario);
+    void registrarDevolucao(const Livro& livro, const Usuario& usuario, const ControleAcervo& controleAcervo);
+    void gerarComprovanteDeDevolucao(const Livro& livro, const Usuario& usuario) const;
 };
 
-#endif // CONTROLEACERVO_HPP
+#endif // CONTROLEEMPRESTIMO_HPP
+```
+
+`ControleEmprestimo.cpp`
+
+```c++
+#include "ControleEmprestimo.hpp"
+#include <iostream>
+#include <ctime>
+
+void ControleEmprestimo::registrarEmprestimo(const Livro& livro, const Usuario& usuario, const ControleAcervo& controleAcervo) {
+    // Verificar a disponibilidade do livro no acervo
+    if (!livro.estaDisponivel()) {
+        std::cout << "O livro não está disponível para empréstimo.\n";
+        return;
+    }
+
+    // Registrar o empréstimo no controle de acervo
+    controleAcervo.registrarEmprestimo(livro, usuario);
+
+    // Adicionar o empréstimo à lista de empréstimos
+    emprestimos.push_back(std::make_pair(livro, usuario));
+
+    // Exemplo simples: marcar o livro como indisponível
+    livro.marcarComoIndisponivel();
+
+    // Exemplo simples: exibir mensagem de sucesso
+    std::cout << "Empréstimo registrado com sucesso.\n";
+}
+
+void ControleEmprestimo::registrarRenovacao(const Livro& livro, const Usuario& usuario) {
+    // Verificar se o livro está emprestado para o usuário
+    auto it = std::find_if(emprestimos.begin(), emprestimos.end(),
+                           [&](const auto& emprestimo) {
+                               return emprestimo.first.getCodigoCadastro() == livro.getCodigoCadastro() &&
+                                      emprestimo.second.getNomeUsuario() == usuario.getNomeUsuario();
+                           });
+
+    if (it != emprestimos.end()) {
+        // Aqui você pode adicionar a lógica para verificar se é possível renovar
+        // e atualizar a data de devolução, se necessário.
+
+        // Exemplo simples: exibir mensagem de sucesso
+        std::cout << "Renovação registrada com sucesso.\n";
+    } else {
+        std::cout << "Livro não emprestado para o usuário. Não é possível renovar.\n";
+    }
+}
+
+void ControleEmprestimo::registrarDevolucao(const Livro& livro, const Usuario& usuario, const ControleAcervo& controleAcervo) {
+    // Verificar se o livro foi emprestado pelo usuário
+    auto it = std::find_if(emprestimos.begin(), emprestimos.end(),
+                           [&](const auto& emprestimo) {
+                               return emprestimo.first.getCodigoCadastro() == livro.getCodigoCadastro() &&
+                                      emprestimo.second.getNomeUsuario() == usuario.getNomeUsuario();
+                           });
+
+    if (it != emprestimos.end()) {
+        // Registrar a devolução no controle de acervo
+        controleAcervo.registrarDevolucao(livro, usuario);
+
+        // Remover o empréstimo da lista de empréstimos
+        emprestimos.erase(it);
+
+        // Exemplo simples: marcar o livro como disponível
+        livro.marcarComoDisponivel();
+
+        // Exemplo simples: exibir mensagem de sucesso
+        std::cout << "Devolução registrada com sucesso.\n";
+    } else {
+        std::cout << "Livro não emprestado para o usuário. Não é possível devolver.\n";
+    }
+}
+	// Implementar a lógica para gerar um comprovante de devolução
+	// Função auxiliar para obter a data atual
+	std::string getCurrentDate() {
+    	std::time_t now = std::time(0);
+    	std::tm* localTime = std::
+    	st
+	localtime(&now);
+    	char buffer[80];
+   	 std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
+    	return buffer;
+	}
+
+void ControleEmprestimo::gerarComprovanteDeDevolucao(const Livro& livro, const Usuario& usuario) const {
+    
+    // Pode incluir informações como livro, usuário, data de devolução, etc.
+    std::cout << "Comprovante de Devolução:\n";
+    std::cout << "Livro: " << livro.getTitulo() << "\n";
+    std::cout << "Usuário: " << usuario.getNomeUsuario() << "\n";
+    std::cout << "Data de Devolução: " << getCurrentDate() << "\n"; // Implemente uma função para obter a data atual
+}
 ```
