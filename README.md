@@ -10,7 +10,6 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 #include "ControleEmprestimo.hpp"  
 #include "Pesquisa.hpp"  
 
-
 void Bibliotecario::cadastrarLivro(ControleAcervo& acervo) {
     std::string titulo, autor, edicao, editora, sinopse, categoria;
     int numPaginas;
@@ -42,11 +41,8 @@ void Bibliotecario::cadastrarLivro(ControleAcervo& acervo) {
 
     std::cout << "Livro cadastrado com sucesso!" << std::endl;
 }
-
 void Bibliotecario::cadastrarUsuario(Usuario& usuario) {
-   
 }
-
 void Bibliotecario::realizarEmprestimo(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario) {
     @param Supondo que você tenha um livro disponível no acervo
     Livro livro = acervo.obterLivroDisponivel();
@@ -67,14 +63,12 @@ void Bibliotecario::realizarEmprestimo(ControleAcervo& acervo, ControleEmprestim
 
     std::cout << "Empréstimo realizado com sucesso!" << std::endl;
 }
-
 void Bibliotecario::realizarDevolucao(ControleAcervo& acervo, ControleEmprestimo& controleEmprestimo, Usuario& usuario) {
     @param Supondo que você tenha um livro emprestado pelo usuário
     Livro livro = controleEmprestimo.obterLivroEmprestado(usuario);
     
     @param Chame a função registrarDevolucao com o livro obtido
     controleEmprestimo.registrarDevolucao(livro, usuario, acervo);
-    
 
     @param Supondo que o usuário já tenha livros emprestados
     std::string codigoLivro;
