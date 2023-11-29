@@ -4,8 +4,9 @@ Um sistema de biblioteca é uma plataforma que facilita a gestão de uma bibliot
 ## Classes
 A classe Bibliotecario é responsável por gerenciar as operações de uma biblioteca. Ela fornece métodos para cadastrar, atualizar, emprestar, devolver e pesquisar livros e usuários.
 
-Os métodos cadastrar livro e cadastrar usuário permitem que o bibliotecário insira novas informações no acervo da biblioteca. Os métodos atualizar informações do livro e atualizar informações do usuário permitem que o bibliotecário altere informações existentes. Os métodos fazer empréstimo e fazer devolução permitem que o bibliotecário gerencie o empréstimo de livros. O método fazer pesquisa permite que o bibliotecário pesquise livros no acervo da biblioteca.
 ### Classe Bibliotecário
+
+Os métodos cadastrar livro e cadastrar usuário permitem que o bibliotecário insira novas informações no acervo da biblioteca. Os métodos atualizar informações do livro e atualizar informações do usuário permitem que o bibliotecário altere informações existentes. Os métodos fazer empréstimo e fazer devolução permitem que o bibliotecário gerencie o empréstimo de livros. O método fazer pesquisa permite que o bibliotecário pesquise livros no acervo da biblioteca.
 
 `bibliotecario.hpp`
 
